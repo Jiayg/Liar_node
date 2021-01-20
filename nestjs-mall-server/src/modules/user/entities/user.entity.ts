@@ -1,22 +1,42 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { MaxLength, MinLength } from "class-validator";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity()
+@Entity('users')
 export class User {
-
-    @ApiProperty({ type: 'number', title: '主键Id' })
     @PrimaryGeneratedColumn()
+    @ApiProperty({ type: 'number', title: '主键Id' })
     id: number;
 
-    @Column()
-    @ApiProperty({ type: 'string', title: '姓' })
-    fristname: string;
+    @Column({ comment: '账号' })
+    @ApiProperty({ type: 'string', title: '账号' })
+    username: string;
 
-    @Column()
-    @ApiProperty({ type: 'string', title: '名' })
-    lastName: string;
+    @Column({ comment: '密码' })
+    @ApiProperty({ type: 'string', title: '密码' })
+    password: string;
 
     @Column({ default: true })
-    @ApiProperty({ type: 'string', title: '是否启用' })
-    isActive: boolean;
+    @ApiProperty({ type: 'boolean', title: '是否启用' })
+    flag: boolean;
+
+    @Column({ default: true })
+    @ApiProperty({ type: 'boolean', title: '账户状态' })
+    status: boolean;
+
+    @CreateDateColumn({ name: 'create_time' })
+    @ApiProperty({ type: 'datatime', title: '创建时间' })
+    @ApiProperty()
+    createTime: Date;
+
+    @UpdateDateColumn({ name: 'update_time' })
+    @ApiProperty({ type: 'string', title: '更新时间' })
+    updateTime: Date;
+
+    async createPassword(password: string) {
+        // const h = new hashers.PBKDF2PasswordHasher();
+        // const hash = await h.encode(password, h.salt());
+        return password;
+    }
+
 }

@@ -1,0 +1,15 @@
+{
+  "eslint.validate": [
+    "javascript",
+    {
+      "language": "vue",
+      "autoFix": true
+    },
+    {
+      "language": "typescript",
+      "autoFix": true
+    }
+  ],
+  "eslint.alwaysShowStatus": true,
+  "workbench.editor.enablePreview": false
+}

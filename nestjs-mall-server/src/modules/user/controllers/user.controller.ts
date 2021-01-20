@@ -1,11 +1,15 @@
+import { MyLogger } from './../../logger/services/logger.service';
 import { UserService } from '../services/user.service';
-import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, LoggerService } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-    constructor(private readonly userService: UserService) { }
+    constructor(
+        private readonly userService: UserService
+    ) { }
 
     @Get()
     @HttpCode(HttpStatus.OK)
@@ -14,9 +18,10 @@ export class UserController {
         return this.userService.findAll();
     }
 
-    @Get('c')
-    @ApiOperation({ summary: 'test' })
+    @Get('env')
+    @ApiOperation({ summary: '当前开发环境' })
     async getc() {
-        return process.env.TEST
+        MyLogger.error('env!!!');
+        return process.env.NODE_ENV
     }
 }
