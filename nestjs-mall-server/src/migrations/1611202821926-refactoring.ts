@@ -2,7 +2,7 @@ import { plainToClass } from 'class-transformer';
 import { User } from "src/modules/user/entities";
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class refactoring1611154467325 implements MigrationInterface {
+export class refactoring1611202821926 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
 

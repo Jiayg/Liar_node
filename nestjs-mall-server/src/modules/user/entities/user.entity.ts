@@ -2,19 +2,26 @@ import { ApiProperty } from "@nestjs/swagger";
 import { MaxLength, MinLength } from "class-validator";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity('users')
+@Entity({ name: 'users' })
 export class User {
     @PrimaryGeneratedColumn()
     @ApiProperty({ type: 'number', title: '主键Id' })
     id: number;
 
     @Column({ comment: '账号' })
+    @MinLength(6)
+    @MaxLength(24)
     @ApiProperty({ type: 'string', title: '账号' })
     username: string;
 
     @Column({ comment: '密码' })
+    @MinLength(6)
+    @MaxLength(24)
     @ApiProperty({ type: 'string', title: '密码' })
     password: string;
+
+    @Column('simple-array', { comment: '角色', nullable: true })
+    role: string[];
 
     @Column({ default: true })
     @ApiProperty({ type: 'boolean', title: '是否启用' })
@@ -39,4 +46,16 @@ export class User {
         return password;
     }
 
+    async validatePassword(password: string) {
+        // const h = new hashers.PBKDF2PasswordHasher();
+        // return h.verify(password, this.password);
+        return password === this.password;
+    }
+
+    async setPassword(password: string) {
+        if (password) {
+            this.password = await this.createPassword(password);
+        }
+        return this;
+    }
 }

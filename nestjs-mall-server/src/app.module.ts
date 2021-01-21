@@ -1,24 +1,26 @@
+import { UserTokenService } from './modules/user/services/user-token.service';
+import { AccountModule } from './modules/account/account.module';
 import { LoggerModule } from './modules/logger/logger.module';
-import { ProductModule } from './modules/product/product.module';
 import { UserModule } from './modules/user/user.module';
-import { OrderModule } from './modules/order/order.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { GoodModule } from './modules/good/good.module';
+import { CategoryModule } from './modules/category/category.module';
 
 @Module({
   imports: [
-    LoggerModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
     TypeOrmModule.forRoot(),
     LoggerModule,
+    AccountModule,
     UserModule,
-    // ProductModule,
-    // OrderModule,
+    GoodModule,
+    CategoryModule
   ],
-  controllers: [],
-  providers: [],
+  providers: [
+    UserTokenService],
 })
 export class AppModule { }

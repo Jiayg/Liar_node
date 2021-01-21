@@ -1,6 +1,8 @@
+import { PageOutDto } from './../../../common/dto/page_out.dto';
+import { User } from 'src/modules/user/entities';
 import { MyLogger } from './../../logger/services/logger.service';
 import { UserService } from '../services/user.service';
-import { Controller, Get, HttpCode, HttpStatus, LoggerService } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 
@@ -15,6 +17,11 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: '查询全部用户' })
     async getAll() {
+
+        var data = await this.userService.findAll();
+        var ss = new PageOutDto<User>();
+        ss.total = data.length;
+        ss.rows = data;
         return this.userService.findAll();
     }
 

@@ -33,6 +33,7 @@ module.exports = {
   synchronize: isDevelop,
   console: isDevelop,
   cli: {
-    migrationsDir: `./src/migrations`,
+    migrationsDir: './src/migrations',
+    subscribersDir: './src/subscriber',
   },
 };
