@@ -1,1 +1,1 @@
-export * from './good.service'
+export * from './good.service';

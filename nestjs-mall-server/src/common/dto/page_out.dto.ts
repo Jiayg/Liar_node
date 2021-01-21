@@ -1,9 +1,9 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class PageOutDto<T> {
-    @ApiProperty()
-    total: number;
+  @ApiProperty()
+  total: number;
 
-    @ApiProperty()
-    rows: T[]
+  @ApiProperty()
+  rows: T[];
 }

@@ -18,9 +18,8 @@ import { CategoryModule } from './modules/category/category.module';
     AccountModule,
     UserModule,
     GoodModule,
-    CategoryModule
+    CategoryModule,
   ],
-  providers: [
-    UserTokenService],
+  providers: [UserTokenService],
 })
-export class AppModule { }
+export class AppModule {}

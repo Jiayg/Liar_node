@@ -5,27 +5,27 @@ import { sign } from 'jsonwebtoken';
 
 @Injectable()
 export class UserTokenService {
-    constructor(
-        private readonly configService: ConfigService
-    ) { }
+  constructor(private readonly configService: ConfigService) {}
 
-    async create(user: User) {
-        const signString = sign(
-            {
-                id: user.id,
-                username: user.username,
-                role: user.role
-            },
+  async create(user: User) {
+    const signString = sign(
+      {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+      },
 
-            this.createSecretKey(user),
-            {
-                expiresIn: this.configService.get('JWT_EXPIRATION_DELTA')
-            }
-        );
-        return signString;
-    }
+      this.createSecretKey(user),
+      {
+        expiresIn: this.configService.get('JWT_EXPIRATION_DELTA'),
+      },
+    );
+    return signString;
+  }
 
-    createSecretKey(user: User) {
-        return (this.configService.get('JWT_SECRET_KEY') + (user ? '$' + user.id : ''));
-    }
+  createSecretKey(user: User) {
+    return (
+      this.configService.get('JWT_SECRET_KEY') + (user ? '$' + user.id : '')
+    );
+  }
 }

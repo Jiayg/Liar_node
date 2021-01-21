@@ -46,6 +46,6 @@ async function bootstrap() {
   // 启动监听端口
   await app.listen(3000);
 
-  console.log("http://localhost:3000");
+  console.log('http://localhost:3000');
 }
 bootstrap();

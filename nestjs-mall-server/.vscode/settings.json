@@ -11,5 +11,6 @@
     }
   ],
   "eslint.alwaysShowStatus": true,
-  "workbench.editor.enablePreview": false
+  "workbench.editor.enablePreview": false,
+  "window.zoomLevel": -0.05
 }

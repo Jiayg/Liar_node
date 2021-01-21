@@ -1,1 +1,1 @@
-export * from './good.controller'
+export * from './good.controller';

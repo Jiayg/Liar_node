@@ -9,15 +9,15 @@ import { UserTokenService } from '../services/user-token.service';
 @ApiTags('admin_sign')
 @Controller('auth')
 export class SignController {
-    constructor(
-        private readonly userService: UserService,
-        private readonly userTokenService: UserTokenService
-    ) { }
+  constructor(
+    private readonly userService: UserService,
+    private readonly userTokenService: UserTokenService,
+  ) {}
 
-    @Post('signin')
-    @ApiOperation({ summary: '管理员登录' })
-    async signIn(@Req() req, @Body() signInDto: SignInDto) {
-        const token = this.userTokenService.create(req.user);
-        return plainToClass(UserTokenDto, { user: req.user, token });
-    }
+  @Post('signin')
+  @ApiOperation({ summary: '管理员登录' })
+  async signIn(@Req() req, @Body() signInDto: SignInDto) {
+    const token = this.userTokenService.create(req.user);
+    return plainToClass(UserTokenDto, { user: req.user, token });
+  }
 }

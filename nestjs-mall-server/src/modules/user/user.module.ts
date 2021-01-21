@@ -10,9 +10,9 @@ const serviceModule = _.values(services);
 const controllerModule = _.values(controllers);
 
 @Module({
-    imports: [TypeOrmModule.forFeature([...entitieModule])],
-    controllers: [...controllerModule],
-    providers: [...serviceModule],
-    exports: [...serviceModule]
+  imports: [TypeOrmModule.forFeature([...entitieModule])],
+  controllers: [...controllerModule],
+  providers: [...serviceModule],
+  exports: [...serviceModule],
 })
-export class UserModule { }
+export class UserModule {}
