@@ -1,9 +1,11 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Module } from '@nestjs/common';
+import { DynamicModule, HttpModule, MiddlewareConsumer, Module, NestModule, Provider } from '@nestjs/common';
 import * as _ from 'lodash';
 import * as entities from './entities';
 import * as services from './services';
 import * as controllers from './controllers';
+import { USER_PASSPORT_STRATEGIES } from './passport';
+import { authenticate } from 'passport';
 
 const entitieModule = _.values(entities);
 const serviceModule = _.values(services);
@@ -12,7 +14,31 @@ const controllerModule = _.values(controllers);
 @Module({
   imports: [TypeOrmModule.forFeature([...entitieModule])],
   controllers: [...controllerModule],
-  providers: [...serviceModule],
+  providers: [...serviceModule, ...USER_PASSPORT_STRATEGIES],
   exports: [...serviceModule],
 })
-export class UserModule {}
+export class UserModule implements NestModule {
+  static forRoot(options: { providers: Provider[] }): DynamicModule {
+    return {
+      module: UserModule,
+      imports: [
+        HttpModule,
+        TypeOrmModule.forFeature([...entitieModule]),
+      ],
+      controllers: [...controllerModule],
+      providers: [
+        ...options.providers,
+        ...serviceModule,
+        ...USER_PASSPORT_STRATEGIES,
+      ],
+      exports: [...serviceModule],
+    };
+  }
+  public configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(
+        authenticate('admin_sign', { session: false, passReqToCallback: true })
+      )
+      .forRoutes('admin_sign/signin');
+  }
+}

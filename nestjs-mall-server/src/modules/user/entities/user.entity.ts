@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MaxLength, MinLength } from 'class-validator';
+import { MaxLength, MinLength, validateSync } from 'class-validator';
+import { CustomValidationError } from 'src/common/exceptions/custom-validation.error';
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -46,22 +49,26 @@ export class User {
   @ApiProperty({ type: 'string', title: '更新时间' })
   updateTime: Date;
 
+  @BeforeInsert()
+  doBeforeInsertion() {
+    const errors = validateSync(this, { validationError: { target: false } });
+    if (errors.length > 0) {
+      throw new CustomValidationError(errors);
+    }
+  }
+
+  @BeforeUpdate()
+  doBeforeUpdate() {
+    const errors = validateSync(this, { validationError: { target: false } });
+    if (errors.length > 0) {
+      throw new CustomValidationError(errors);
+    }
+  }
+
+  // seed mysql 加密
   async createPassword(password: string) {
     // const h = new hashers.PBKDF2PasswordHasher();
     // const hash = await h.encode(password, h.salt());
     return password;
-  }
-
-  async validatePassword(password: string) {
-    // const h = new hashers.PBKDF2PasswordHasher();
-    // return h.verify(password, this.password);
-    return password === this.password;
-  }
-
-  async setPassword(password: string) {
-    if (password) {
-      this.password = await this.createPassword(password);
-    }
-    return this;
   }
 }

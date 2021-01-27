@@ -1,18 +1,32 @@
 import {
   UserNotConfiguredMenuException,
   UserNotFoundException,
+  WrongPasswordException,
 } from '../user.error';
 import { User } from '../entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { SignInDto } from '../dto/sign_in.dto';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-  ) {}
+  ) { }
+
+  // 登录
+  async signIn(option: SignInDto): Promise<User> {
+    const user = await this.userRepository.findOne({ username: option.email });
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+    if (user.password != option.password) {
+      throw new WrongPasswordException();
+    }
+    return user
+  }
 
   // 添加
   async create(user: User): Promise<any> {
@@ -51,7 +65,11 @@ export class UserService {
   // 根据账户查询
   async findByUserName(username: string): Promise<User> {
     try {
-      return await this.userRepository.findOne({ username });
+      const model = await this.userRepository.findOne({ username });
+      if (!model) {
+        throw new UserNotFoundException();
+      }
+      return model;
     } catch (error) {
       throw new UserNotFoundException();
     }
