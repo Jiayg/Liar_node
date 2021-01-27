@@ -15,13 +15,9 @@ export class LocalStrategySignIn extends PassportStrategy(Strategy, 'admin_sign'
   }
 
   public async validate(req, email: string, password: string) {
-    try {
-      return await this.usersService.signIn({
-        email,
-        password
-      });
-    } catch (error) {
-      throw new Error("登录异常");
-    }
+    return await this.usersService.signIn({
+      email,
+      password
+    });
   }
 }

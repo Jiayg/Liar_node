@@ -22,7 +22,7 @@ export class SignController {
   @ApiOperation({ summary: '管理员登录' })
   @ApiCustomResponse(WrongPasswordException)
   @ApiCustomResponse(UserNotFoundException)
-  async signIn(@Req() req) {
+  async signIn(@Req() req, @Body() signInDto: SignInDto) {
     const token = await this.userTokenService.create(req.user);
     return plainToClass(UserTokenDto, { token, user: req.user });
   }

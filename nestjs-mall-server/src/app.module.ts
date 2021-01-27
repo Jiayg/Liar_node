@@ -1,6 +1,5 @@
 import { HttpExceptionFilter } from './common/filters/http-exception-filter';
 import { AccountModule } from './modules/account/account.module';
-import { LoggerModule } from './modules/logger/logger.module';
 import { UserModule } from './modules/user/user.module';
 import { Module, ValidationPipe, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -15,7 +14,6 @@ import { APP_PIPE } from '@nestjs/core';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot(),
-    LoggerModule,
     AccountModule,
     UserModule,
     GoodModule,

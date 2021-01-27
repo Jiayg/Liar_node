@@ -1,14 +1,15 @@
 import { PageOutDto } from './../../../common/dto/page_out.dto';
 import { User } from 'src/modules/user/entities';
-import { MyLogger } from './../../logger/services/logger.service';
 import { UserService } from '../services/user.service';
 import { Controller, Get, HttpCode, HttpStatus, Body, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { SignInDto } from '../dto/sign_in.dto';
+import { Logger } from "@nestjs/common";
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
+  private readonly logger = new Logger("UserController");
   constructor(private readonly userService: UserService) { }
 
   @Get()
@@ -31,7 +32,10 @@ export class UserController {
   @Get('env')
   @ApiOperation({ summary: '当前开发环境' })
   async getc() {
-    MyLogger.error('env!!!');
+    this.logger.error('env!!!');
+    this.logger.log('log');
+    this.logger.debug('debug');
+    this.logger.warn('warn');
     return process.env.NODE_ENV;
   }
 }
