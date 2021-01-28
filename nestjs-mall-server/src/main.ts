@@ -8,58 +8,38 @@ import { AppModule } from './app.module';
 import { Log4jsService } from "@quickts/nestjs-log4js";
 import { ValidationPipe } from '@nestjs/common';
 import { TransformInterceptor } from './common/interceptor/transform.interceptor';
-import { join, resolve } from 'path';
+
 
 async function bootstrap() {
-  const basePath = resolve(process.cwd(), "logs");
-  const logger = new Log4jsService({
-    appenders: {
-      logToErrorFile: {
-        type: "dateFile",
-        filename: join(basePath, "err/err"),
-        alwaysIncludePattern: true,
-        pattern: "yyyy-MM-dd.log",
-        daysToKeep: 14
-      },
-      // logToLogFile: {
-      //   type: "dateFile",
-      //   filename: join(basePath, "log/log"),
-      //   alwaysIncludePattern: true,
-      //   pattern: "yyyy-MM-dd.log",
-      //   daysToKeep: 14
-      // },
-      errorLogger: {
-        type: "logLevelFilter",
-        appender: "logToErrorFile",
-        level: "error"
-      },
-      // logLogger: {
-      //   type: "logLevelFilter",
-      //   level: "log",
-      //   appender: "logToLogFile",
-
-      // },
-      appLogger: {
-        type: "dateFile",
-        filename: join(basePath, "all/all"),
-        alwaysIncludePattern: true,
-        pattern: "yyyy-MM-dd.log",
-        daysToKeep: 14
-      },
-      consoleLogger: {
-        type: "console",
-        layout: {
-          type: "colored"
-        }
-      }
-    }, categories: {
-      default: {
-        appenders: ["consoleLogger", "appLogger", "errorLogger"],
-        level: 'debug'
-      }
-    }
-  });
+  // 引用log4js替换官方log
+  const logger = new Log4jsService();
   const app = await NestFactory.create<NestExpressApplication>(AppModule, { logger });
+
+  //自动验证
+  app.useGlobalPipes(new ValidationPipe({
+    // disableErrorMessages: false,//禁用详细错误
+    transform: true,//负载对象转换(Transform)
+  }));
+
+  // 全局注册错误的过滤器
+  app.useGlobalFilters(new HttpExceptionFilter());
+
+  // 全局注册拦截器
+  app.useGlobalInterceptors(new TransformInterceptor());
+
+  // 跨源资源共享
+  app.enableCors();
+
+  // Web应用安全中间件
+  app.use(helmet());
+
+  // IP请求限速
+  app.use(
+    rateLimit({
+      windowMs: 1 * 60 * 1000, // 1 minutes
+      max: 60, // limit each IP to 100 requests per windowMs
+    }),
+  );
 
   // 配置Swagger
   const options = new DocumentBuilder()
@@ -84,32 +64,6 @@ async function bootstrap() {
         }
       }
     }
-  );
-
-  // 全局注册拦截器
-  app.useGlobalInterceptors(new TransformInterceptor());
-
-  //自动验证
-  app.useGlobalPipes(new ValidationPipe({
-    // disableErrorMessages: false,//禁用详细错误
-    transform: true,//负载对象转换(Transform)
-  }));
-
-  // 全局注册错误的过滤器
-  app.useGlobalFilters(new HttpExceptionFilter());
-
-  // 跨源资源共享
-  app.enableCors();
-
-  // Web应用安全中间件
-  app.use(helmet());
-
-  // IP请求限速
-  app.use(
-    rateLimit({
-      windowMs: 1 * 60 * 1000, // 1 minutes
-      max: 60, // limit each IP to 100 requests per windowMs
-    }),
   );
 
   // 启动监听端口

@@ -14,7 +14,6 @@ import { Roles } from 'src/common/decorators/roles.decorator';
 @Controller('admin_sign')
 export class SignController {
   constructor(
-    private readonly userService: UserService,
     private readonly userTokenService: UserTokenService,
   ) { }
 
@@ -25,16 +24,6 @@ export class SignController {
   async signIn(@Req() req, @Body() signInDto: SignInDto) {
     const token = await this.userTokenService.create(req.user);
     return plainToClass(UserTokenDto, { token, user: req.user });
-  }
-
-  @ApiBearerAuth()
-  @UseGuards(AdminAccessGuard)
-  @Roles('superAdmin')
-  @Get("all-admin")
-  @ApiOperation({ summary: '查询所有管理员' })
-  @ApiCustomResponse(ForbiddenException)
-  async getAll() {
-    return await this.userService.findAll();
   }
 
 }

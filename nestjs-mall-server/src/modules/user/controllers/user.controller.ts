@@ -1,10 +1,13 @@
 import { PageOutDto } from './../../../common/dto/page_out.dto';
 import { User } from 'src/modules/user/entities';
 import { UserService } from '../services/user.service';
-import { Controller, Get, HttpCode, HttpStatus, Body, Post } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, HttpCode, HttpStatus, Body, Post, UseGuards, ForbiddenException } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { SignInDto } from '../dto/sign_in.dto';
 import { Logger } from "@nestjs/common";
+import { AdminAccessGuard } from 'src/common/guards';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { ApiCustomResponse } from 'src/common/decorators/api-custom-response.decorator';
 
 @ApiTags('User')
 @Controller('user')
@@ -13,13 +16,13 @@ export class UserController {
   constructor(private readonly userService: UserService) { }
 
   @Get()
+  @ApiBearerAuth()
+  @UseGuards(AdminAccessGuard)
+  @Roles('superAdmin')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: '查询全部用户' })
+  // @ApiCustomResponse(ForbiddenException)
   async getAll() {
-    var data = await this.userService.findAll();
-    var ss = new PageOutDto<User>();
-    ss.total = data.length;
-    ss.rows = data;
     return this.userService.findAll();
   }
 
@@ -32,7 +35,7 @@ export class UserController {
   @Get('env')
   @ApiOperation({ summary: '当前开发环境' })
   async getc() {
-    this.logger.error('env!!!');
+    this.logger.error('error');
     this.logger.log('log');
     this.logger.debug('debug');
     this.logger.warn('warn');

@@ -1,11 +1,11 @@
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { DynamicModule, HttpModule, MiddlewareConsumer, Module, NestModule, Provider } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { USER_PASSPORT_STRATEGIES } from './passport';
+import { authenticate } from 'passport';
 import * as _ from 'lodash';
 import * as entities from './entities';
 import * as services from './services';
 import * as controllers from './controllers';
-import { USER_PASSPORT_STRATEGIES } from './passport';
-import { authenticate } from 'passport';
 
 const entitieModule = _.values(entities);
 const serviceModule = _.values(services);

@@ -1,3 +1,7 @@
+import { RoleModule } from './modules/role/role.module';
+import { RelationService } from './modules/user/services/relation.service';
+import { MenuService } from './modules/user/services/menu.service';
+import { RoleService } from './modules/role/services/role.service';
 import { HttpExceptionFilter } from './common/filters/http-exception-filter';
 import { AccountModule } from './modules/account/account.module';
 import { UserModule } from './modules/user/user.module';
@@ -14,9 +18,10 @@ import { APP_PIPE } from '@nestjs/core';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot(),
-    AccountModule,
     UserModule,
+    RoleModule,
     GoodModule,
+    AccountModule,
     CategoryModule,
   ],
   providers: [
