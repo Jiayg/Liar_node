@@ -1,12 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CryptoUtil } from 'src/common/utils/crypto.util';
+import { ConfigService } from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
+import { CryptoUtil } from '@/common/utils/crypto.util';
 import { SignInDto } from '../dto/sign_in.dto';
 import { User } from '../entities';
-import { UserDisableException, UserNotFoundException, WrongPasswordException } from '../user.error';
+import {
+    UserDisableException,
+    UserNotFoundException,
+    WrongPasswordException
+} from '../user.error';
 
 @Injectable()
 export class TokenService {
@@ -18,7 +22,13 @@ export class TokenService {
         private readonly cryptoUtil: CryptoUtil
     ) { }
 
-    // 登录
+    /**
+     *用户登录
+     *
+     * @param {SignInDto} dto
+     * @return {*}  {Promise<Record<string, unknown>>}
+     * @memberof TokenService
+     */
     async login(dto: SignInDto): Promise<Record<string, unknown>> {
         const user = await this.userRepository.findOne({ username: dto.email });
         if (!user) throw new UserNotFoundException();
@@ -28,8 +38,11 @@ export class TokenService {
     }
 
     /**
-     * 生成 token
-     * @param payload { id: string }
+     *根据ID生成token
+     *
+     * @param {{ id: number }} payload
+     * @return {*}  {Promise<Record<string, unknown>>}
+     * @memberof TokenService
      */
     async createToken(payload: { id: number }): Promise<Record<string, unknown>> {
         const accessToken = this.jwtService.sign(payload);
@@ -37,12 +50,24 @@ export class TokenService {
         return { accessToken, refreshToken }
     }
 
-    // 刷新token
+    /**
+     *刷新token
+     *
+     * @param {number} id
+     * @return {*}  {Promise<Record<string, unknown>>}
+     * @memberof TokenService
+     */
     async refreshToken(id: number): Promise<Record<string, unknown>> {
         return this.createToken({ id })
     }
 
-    // 验证token
+    /**
+     *验证token是否过期
+     *
+     * @param {string} token
+     * @return {*}  {Promise<number>}
+     * @memberof TokenService
+     */
     async verifyToken(token: string): Promise<number> {
         try {
             const { id } = this.jwtService.verify(token)

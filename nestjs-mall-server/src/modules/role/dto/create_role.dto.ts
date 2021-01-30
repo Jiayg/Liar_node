@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { InputDto } from "src/common/dto/input.dto";
+import { InputDto } from "@/common/basemodel/input.dto";
 
 export class CreateRoleDto extends InputDto {
     @ApiProperty({ type: 'string', title: '名称' })

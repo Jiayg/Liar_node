@@ -1,11 +1,3 @@
-/*
- * @Author: your name
- * @Date: 2021-01-28 11:21:01
- * @LastEditTime: 2021-01-28 14:49:21
- * @LastEditors: your name
- * @Description: In User Settings Edit
- * @FilePath: \nestjs-mall-server\src\modules\user\entities\menu.entity.ts
- */
 import { ApiProperty } from "@nestjs/swagger";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 

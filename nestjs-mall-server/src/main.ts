@@ -1,13 +1,13 @@
-import * as helmet from 'helmet';
-import * as rateLimit from 'express-rate-limit';
-import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from './app.module';
 import { Log4jsService } from "@quickts/nestjs-log4js";
 import { ValidationPipe } from '@nestjs/common';
-import { TransformInterceptor } from './common/interceptor/transform.interceptor';
-import { AnyExceptionsFilter, HttpExceptionFilter } from './common/filters';
+import { NestFactory } from '@nestjs/core';
+import * as rateLimit from 'express-rate-limit';
+import { TransformInterceptor } from './common/interceptor';
+import { HttpExceptionFilter } from './common/filters';
+import { AppModule } from './app.module';
+import * as helmet from 'helmet';
 
 
 async function bootstrap() {
@@ -17,7 +17,7 @@ async function bootstrap() {
 
   //自动验证
   app.useGlobalPipes(new ValidationPipe({
-    // disableErrorMessages: false,//禁用详细错误
+    disableErrorMessages: false,//禁用详细错误
     transform: true,//负载对象转换(Transform)
   }));
 

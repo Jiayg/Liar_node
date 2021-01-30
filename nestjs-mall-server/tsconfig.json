@@ -14,6 +14,16 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "typeRoots": ["node_modules/@types"],
+    "paths": {
+      "@/*": ["src/*"],
+      "@/interceptor/*": ["src/common/interceptor/*"],
+      "@/exceptions/*": ["src/common/exceptions/*"],
+      "@/decorators/*": ["src/common/decorators/*"],
+      "@/exception/*": ["src/common/exception/*"],
+      "@/basemodel/*": ["src/common/basemodel/*"],
+      "@/filters/*": ["src/common/filters/*"],
+      "@/guards/*": ["src/common/guards/*"]
+    },
     "incremental": true
   },
   "exclude": ["node_modules", "dist"]

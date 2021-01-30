@@ -1,14 +1,13 @@
-
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import * as _ from 'lodash';
-import * as entities from './entities';
-import * as services from './services';
-import * as controllers from './controllers';
-import { AuthModule } from '../auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { CryptoUtil } from 'src/common/utils/crypto.util';
+import { CryptoUtil } from '@/common/utils/crypto.util';
+import { AuthModule } from '../auth/auth.module';
+import * as controllers from './controllers';
+import * as services from './services';
+import * as entities from './entities';
+import * as _ from 'lodash';
 
 const entitieModule = _.values(entities);
 const serviceModule = _.values(services);
@@ -30,7 +29,7 @@ const controllerModule = _.values(controllers);
     })
   ],
   controllers: [...controllerModule],
-  providers: [...serviceModule,CryptoUtil],
+  providers: [...serviceModule, CryptoUtil],
   exports: [...serviceModule],
 })
 export class UserModule { }

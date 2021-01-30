@@ -2,7 +2,6 @@ import { Product_TypeModule } from './modules/product_type/product_type.module';
 import { ProductModule } from './modules/product/product.module';
 import { RelationModule } from './modules/relation/relation.module';
 import { MenuModule } from './modules/menu/menu.module';
-import { PermModule } from './modules/perm/perm.module';
 import { RoleModule } from './modules/role/role.module';
 import { HttpExceptionFilter } from './common/filters/http-exception-filter';
 import { AccountModule } from './modules/account/account.module';
@@ -21,7 +20,6 @@ import { APP_PIPE } from '@nestjs/core';
     UserModule,
     RoleModule,
     RelationModule,
-    PermModule,
     MenuModule,
     ProductModule,
     Product_TypeModule,

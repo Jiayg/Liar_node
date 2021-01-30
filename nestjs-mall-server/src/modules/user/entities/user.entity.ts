@@ -1,6 +1,6 @@
+import { CustomValidationError } from '@/common/exceptions';
 import { ApiProperty } from '@nestjs/swagger';
 import { MaxLength, MinLength, validateSync } from 'class-validator';
-import { CustomValidationError } from 'src/common/exceptions/custom-validation.error';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -8,7 +8,6 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'sysuser' })

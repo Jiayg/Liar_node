@@ -1,6 +1,5 @@
-import { CustomError } from './../../common/exceptions/custom.error';
-import { ErrorCode } from 'src/common/decorators/error-code.decorator';
-
+import { ErrorCode } from "@/common/decorators/error-code.decorator";
+import { CustomError } from "@/common/exceptions";
 @ErrorCode(640, '未找到用户名')
 export class UserNotFoundException extends CustomError { }
 @ErrorCode(642, '该账户已被禁用')
