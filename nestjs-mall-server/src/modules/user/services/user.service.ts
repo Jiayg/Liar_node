@@ -13,20 +13,8 @@ import { SignInDto } from '../dto/sign_in.dto';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private readonly userRepository: Repository<User>
   ) { }
-
-  // 登录
-  async signIn(option: SignInDto): Promise<User> {
-    const user = await this.userRepository.findOne({ username: option.email });
-    if (!user) {
-      throw new UserNotFoundException();
-    }
-    if (user.password != option.password) {
-      throw new WrongPasswordException();
-    }
-    return user
-  }
 
   // 添加
   async create(user: User): Promise<any> {
@@ -54,7 +42,7 @@ export class UserService {
   }
 
   // 根据主键id查询
-  async findById(id: string): Promise<User> {
+  async findOneById(id: number): Promise<User> {
     try {
       return await this.userRepository.findOneOrFail(id);
     } catch (error) {
@@ -63,7 +51,7 @@ export class UserService {
   }
 
   // 根据账户查询
-  async findByUserName(username: string): Promise<User> {
+  async findOneByUserName(username: string): Promise<User> {
     try {
       const model = await this.userRepository.findOne({ username });
       if (!model) {

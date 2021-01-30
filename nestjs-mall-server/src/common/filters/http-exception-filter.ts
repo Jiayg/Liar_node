@@ -11,6 +11,9 @@ import { ValidationError } from 'class-validator';
 import { CustomValidationError } from '../exceptions/custom-validation.error';
 import { CustomError } from '../exceptions/custom.error';
 
+/**
+ *捕捉过滤http异常
+*/
 @Catch(SyntaxError, BadRequestException, CustomValidationError, CustomError, HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
     private response(

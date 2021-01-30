@@ -1,1 +1,1 @@
-export * from './admin.access.guard'
+export * from './role.guard'

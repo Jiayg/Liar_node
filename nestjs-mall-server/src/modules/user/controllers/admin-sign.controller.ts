@@ -1,29 +1,26 @@
-import { plainToClass } from 'class-transformer';
-import { SignInDto } from '../dto/sign_in.dto';
+
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
-import { UserService } from '../services';
-import { UserTokenDto } from '../dto/user-token.dto';
-import { UserTokenService } from '../services/user-token.service';
-import { ForbiddenException, UserNotFoundException, WrongPasswordException } from '../user.error';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { UserNotFoundException, WrongPasswordException } from '../user.error';
+import { SignInDto } from '../dto/sign_in.dto';
 import { ApiCustomResponse } from 'src/common/decorators/api-custom-response.decorator';
-import { AdminAccessGuard } from 'src/common/guards';
-import { Roles } from 'src/common/decorators/roles.decorator';
+import { TokenService, UserService } from '../services';
 
 @ApiTags('admin_sign')
 @Controller('admin_sign')
 export class SignController {
   constructor(
-    private readonly userTokenService: UserTokenService,
+    private readonly tokenService: TokenService,
   ) { }
 
   @Post('signin')
   @ApiOperation({ summary: '管理员登录' })
   @ApiCustomResponse(WrongPasswordException)
   @ApiCustomResponse(UserNotFoundException)
-  async signIn(@Req() req, @Body() signInDto: SignInDto) {
-    const token = await this.userTokenService.create(req.user);
-    return plainToClass(UserTokenDto, { token, user: req.user });
+  async signIn(@Body() signInDto: SignInDto) {
+    // const token = await this.userService.login(req.user);
+    // return plainToClass(UserTokenDto, { token, user: req.user });
+    return await this.tokenService.login(signInDto);
   }
 
 }

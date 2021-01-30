@@ -1,6 +1,5 @@
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
-import { HttpExceptionFilter } from './common/filters/http-exception-filter';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -8,6 +7,7 @@ import { AppModule } from './app.module';
 import { Log4jsService } from "@quickts/nestjs-log4js";
 import { ValidationPipe } from '@nestjs/common';
 import { TransformInterceptor } from './common/interceptor/transform.interceptor';
+import { AnyExceptionsFilter, HttpExceptionFilter } from './common/filters';
 
 
 async function bootstrap() {
