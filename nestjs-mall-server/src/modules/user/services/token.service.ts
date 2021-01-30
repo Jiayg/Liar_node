@@ -2,30 +2,28 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CryptoUtil } from 'src/common/utils/crypto.util';
 import { Repository } from 'typeorm';
 import { SignInDto } from '../dto/sign_in.dto';
 import { User } from '../entities';
-import { UserNotFoundException, WrongPasswordException } from '../user.error';
+import { UserDisableException, UserNotFoundException, WrongPasswordException } from '../user.error';
 
 @Injectable()
 export class TokenService {
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
-        // private readonly cryptoUtil: CryptoUtil,
         private readonly jwtService: JwtService,
-        private readonly config: ConfigService
+        private readonly config: ConfigService,
+        private readonly cryptoUtil: CryptoUtil
     ) { }
 
     // 登录
-    async login(option: SignInDto): Promise<Record<string, unknown>> {
-        const user = await this.userRepository.findOne({ username: option.email });
-        if (!user) {
-            throw new UserNotFoundException();
-        }
-        if (user.password != option.password) {
-            throw new WrongPasswordException();
-        }
+    async login(dto: SignInDto): Promise<Record<string, unknown>> {
+        const user = await this.userRepository.findOne({ username: dto.email });
+        if (!user) throw new UserNotFoundException();
+        if (!user.status) throw new UserDisableException()
+        if (!this.cryptoUtil.checkPassword(dto.password, user.password)) throw new WrongPasswordException();
         return await this.createToken({ id: user.id })
     }
 

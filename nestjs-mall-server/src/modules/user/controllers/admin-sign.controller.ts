@@ -6,9 +6,9 @@ import { SignInDto } from '../dto/sign_in.dto';
 import { ApiCustomResponse } from 'src/common/decorators/api-custom-response.decorator';
 import { TokenService, UserService } from '../services';
 
-@ApiTags('admin_sign')
+@ApiTags('管理员')
 @Controller('admin_sign')
-export class SignController {
+export class AdminSignController {
   constructor(
     private readonly tokenService: TokenService,
   ) { }

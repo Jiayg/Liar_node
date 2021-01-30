@@ -5,10 +5,10 @@ import * as _ from 'lodash';
 import * as entities from './entities';
 import * as services from './services';
 import * as controllers from './controllers';
-import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from '../auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CryptoUtil } from 'src/common/utils/crypto.util';
 
 const entitieModule = _.values(entities);
 const serviceModule = _.values(services);
@@ -30,7 +30,7 @@ const controllerModule = _.values(controllers);
     })
   ],
   controllers: [...controllerModule],
-  providers: [...serviceModule],
+  providers: [...serviceModule,CryptoUtil],
   exports: [...serviceModule],
 })
 export class UserModule { }

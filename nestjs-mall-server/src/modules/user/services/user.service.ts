@@ -1,13 +1,11 @@
 import {
   UserNotConfiguredMenuException,
-  UserNotFoundException,
-  WrongPasswordException,
+  UserNotFoundException
 } from '../user.error';
 import { User } from '../entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { SignInDto } from '../dto/sign_in.dto';
 
 @Injectable()
 export class UserService {
@@ -32,7 +30,7 @@ export class UserService {
   }
 
   // 删除
-  async remove(id: string): Promise<boolean> {
+  async delete(id: number): Promise<boolean> {
     return (await (await this.userRepository.delete(id)).raw) > 0;
   }
 
